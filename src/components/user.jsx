@@ -16,12 +16,9 @@ const Users=()=>{
         }
 
         const renderQualities  = (dataQualityUser) => {
-            if(!Array.isArray(dataQualityUser) && dataQualityUser.length < 1){
-                return;
-            }
             return dataQualityUser.map(quality => {
                 const color = `m-2 badge bg-${quality.color}`
-                return (<span key = {quality._id} className = {color} >{quality.name}</span>)
+                return (<span key = {quality._id} className = {color}>{quality.name}</span>)
             });
         }
 
@@ -41,7 +38,7 @@ const Users=()=>{
                     storeUsers.map( user => (
                         <tr key={user._id}>
                             <td>{user.name}</td>
-                            <td>{renderQualities (user.qualities)} </td>
+                            <td>{renderQualities (user.qualities)}</td>
                             <td>{(user?.profession?.name) ? user.profession.name : ""}</td>
                             <td>{user.completedMeetings}</td>
                             <td>{`${user.rate} / 5`}</td>
