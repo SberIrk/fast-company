@@ -27,26 +27,16 @@ function App(){
     }
 
 
-    // Инцилизация данных
-    const init = () => {
-        // Если массив пустой, то вернём только статус
-        if(!Array.isArray(users) || users.length < 1) {
-            return ( <SearchStatus users = {[]}/>);
-        } else {
-        // Данные есть, доабвляем таблицу
-            return(<>
-                <SearchStatus users = {users}/>
-                <Users users = {users}
-                   handleDelete = {handleDelete}
-                   handleBookmark = {handleBookmark}
-                />
-            </>)
-        }
-    }
-
     return (
         <React.StrictMode>
-            {init()}
+            <SearchStatus users = {users}/>
+            {users.length > 0 &&
+                <Users
+                    users = {users}
+                    handleDelete = {handleDelete}
+                    handleBookmark = {handleBookmark}
+                />
+            }
         </React.StrictMode>
     )
 }
