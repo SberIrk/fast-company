@@ -11,7 +11,7 @@ const Bookmark = ({ bookmark, handleBookmark, _id }) => {
 Bookmark.propTypes = {
     bookmark: PropTypes.bool,
     handleBookmark: PropTypes.func.isRequired,
-    _id: PropTypes.number.isRequired
+    _id: PropTypes.string.isRequired
 };
 
 export default Bookmark;
