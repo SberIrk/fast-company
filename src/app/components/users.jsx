@@ -1,10 +1,7 @@
 import React  from "react";
 import User from "./user"
 
-const Users=(props)=>{
-
-    const {users} = props;
-
+const Users=({users,...rest})=>{
     return (
         <table className="table">
             <thead>
@@ -19,11 +16,7 @@ const Users=(props)=>{
             </tr>
             </thead>
             <tbody>{
-                users.map( user => (<User  key = {user._id}
-                    user = {user}
-                    handleBookmark = {props.handleBookmark}
-                    handleDelete = {props.handleDelete}
-                />)
+                users.map( user => (<User {...rest} {...user} key={user._id} />)
             )}</tbody>
         </table>
     );
