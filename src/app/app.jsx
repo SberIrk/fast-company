@@ -26,17 +26,14 @@ function App(){
         });
     }
 
-
     return (
         <React.StrictMode>
             <SearchStatus users = {users}/>
-            {users.length > 0 &&
-                <Users
-                    users = {users}
-                    handleDelete = {handleDelete}
-                    handleBookmark = {handleBookmark}
-                />
-            }
+            <Users
+                users = {users}
+                handleDelete = {handleDelete}
+                handleBookmark = {handleBookmark}
+            />
         </React.StrictMode>
     )
 }
