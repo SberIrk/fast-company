@@ -29,9 +29,12 @@ const Users = ({ users, ...rest }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {userCrop.map(user => (
-                            <User {...rest} {...user} key={user._id} />
-                        ))}
+                        { userCrop.length !== 0
+                            ? userCrop.map(user => (
+                                <User {...rest} {...user} key={user._id} />
+                            ))
+                            : handlePageChange(currentPage - 1)
+                        }
                     </tbody>
                 </table>
             )}
