@@ -45,9 +45,6 @@ const Users = ({ users, ...rest }) => {
                 currentPage = {currentPage}
                 onPageSize = {handlePageChange}
             />
-            {
-
-            }
         </>
     );
 };

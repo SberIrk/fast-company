@@ -8,20 +8,20 @@ function App() {
     const [users, setUsers] = useState(api.users.fetchAll());
 
     // Кнопка удаления
-    const handleDelete = (userID) => {
+    const onDelete = (userID) => {
         setUsers((store) => {
             return store.filter(value => value._id !== userID);
         });
     };
 
     // Кнопка избраное
-    const handleBookmark = (userID) => {
-        setUsers((store) => {
-            return store.map(value => {
-                if (value._id === userID) {
-                    value.bookmark = (!value.bookmark);
+    const onToggleBookMark = (userID) => {
+        setUsers((users) => {
+            return users.map(user => {
+                if (user._id === userID) {
+                    return { ...user, bookmark: !user.bookmark };
                 }
-                return value;
+                return user;
             });
         });
     };
@@ -31,8 +31,8 @@ function App() {
             <SearchStatus users = {users}/>
             <Users
                 users = {users}
-                handleDelete = {handleDelete}
-                handleBookmark = {handleBookmark}
+                onDelete = {onDelete}
+                onToggleBookMark = {onToggleBookMark}
             />
         </React.StrictMode>
     );
