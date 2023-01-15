@@ -25,16 +25,15 @@ function App() {
             });
         });
     };
-
     return (
-        <React.StrictMode>
-            <SearchStatus users = {users}/>
+        <div>
+            <SearchStatus length = {users.length}/>
             <Users
                 users = {users}
                 onDelete = {onDelete}
                 onToggleBookMark = {onToggleBookMark}
             />
-        </React.StrictMode>
+        </div>
     );
 }
 
