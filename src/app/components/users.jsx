@@ -33,7 +33,7 @@ const Users = ({ users, ...rest }) => {
         // Тут не поулчаеться сравнить обьекты
         ? users.filter((user) => user.profession[valuePropertyProf] === selectedProf[valuePropertyProf])
         : users;
-    console.log(filteredUsers);
+
     const count = filteredUsers.length;
     const userCrop = paginate(filteredUsers, currentPage, pageSize);
     const clearFilter = () => {
