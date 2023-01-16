@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Users from "./components/users";
-import SearchStatus from "./components/searchStatus";
 import api from "./api";
 
 function App() {
     // Берём данные api
-    const [users, setUsers] = useState(api.users.fetchAll());
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        api.users.fetchAll().then((data) => setUsers(data));
+    }, []);
 
     // Кнопка удаления
     const onDelete = (userID) => {
@@ -27,7 +30,6 @@ function App() {
     };
     return (
         <div>
-            <SearchStatus length = {users.length}/>
             <Users
                 users = {users}
                 onDelete = {onDelete}
