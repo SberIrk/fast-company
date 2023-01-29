@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from "react";
-import User from "./user";
 import Pagination from "./pagination";
 import { paginate } from "../utilits/utils";
-import PropTypes from "prop-types";
 import GroupList from "./groupList";
 import api from "../api";
 import SearchStatus from "./searchStatus";
+import UsersTable from "./usersTable";
+import _ from "lodash";
 
-const Users = ({ users, ...rest }) => {
+const Users = () => {
+    // Берём данные api users
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        api.users.fetchAll().then((data) => setUsers(data));
+    }, []);
+
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
-    const pageSize = 2;
+    const pageSize = 6;
     const [currentPage, setCurrentPage] = useState(1);
-    const handlePageChange = (pageIndex) => {
-        setCurrentPage(pageIndex);
-    };
+    const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
 
+    //
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
@@ -24,9 +30,9 @@ const Users = ({ users, ...rest }) => {
         setCurrentPage(1);
     }, [selectedProf]);
 
-    const handleProfessionSelect = (item) => {
-        setSelectedProf(item);
-    };
+    if (!users) {
+        return "Loading...";
+    }
 
     const valuePropertyProf = "_id";
     const filteredUsers = selectedProf
@@ -35,9 +41,50 @@ const Users = ({ users, ...rest }) => {
         : users;
 
     const count = filteredUsers.length;
-    const userCrop = paginate(filteredUsers, currentPage, pageSize);
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
+    const userCrop = paginate(sortedUsers, currentPage, pageSize);
+
+    // Смена страницы
+    const handlePageChange = (pageIndex) => {
+        setCurrentPage(pageIndex);
+    };
+
+    if (currentPage > 1 && userCrop.length === 0) {
+        handlePageChange(currentPage - 1);
+    }
+
+    // Фильтр профессии
+    const handleProfessionSelect = (item) => {
+        setSelectedProf(item);
+    };
+
+    // Очистить фильтр
     const clearFilter = () => {
         setSelectedProf();
+    };
+
+    // Сортировка
+    const handleSort = (item) => {
+        setSortBy(item);
+    };
+
+    // Кнопка удаления
+    const onDelete = (userID) => {
+        setUsers((store) => {
+            return store.filter(value => value._id !== userID);
+        });
+    };
+
+    // Кнопка избраное
+    const onToggleBookMark = (userID) => {
+        setUsers((users) => {
+            return users.map(user => {
+                if (user._id === userID) {
+                    return { ...user, bookmark: !user.bookmark };
+                }
+                return user;
+            });
+        });
     };
 
     return (
@@ -60,29 +107,13 @@ const Users = ({ users, ...rest }) => {
             )}
             <div className="d-flex flex-column p-3">
                 <SearchStatus length = {count}/>
-                {count > 0 && (
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Имя</th>
-                                <th scope="col">Качества</th>
-                                <th scope="col">Профессия</th>
-                                <th scope="col">Встретился, раз</th>
-                                <th scope="col">Оценка</th>
-                                <th scope="col">Избраное</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { userCrop.length !== 0
-                                ? userCrop.map(user => (
-                                    <User {...rest} {...user} key={user._id} />
-                                ))
-                                : handlePageChange(currentPage - 1)
-                            }
-                        </tbody>
-                    </table>
-                )}
+                {count > 0 && <UsersTable
+                    users = {userCrop}
+                    onSort = {handleSort}
+                    selectedSort = {sortBy}
+                    onDelete={onDelete}
+                    onToggleBookMark={onToggleBookMark}
+                />}
                 <div className="d-flex justify-content-center">
                     <Pagination
                         itemsCount = {count}
@@ -94,10 +125,6 @@ const Users = ({ users, ...rest }) => {
             </div>
         </div>
     );
-};
-
-Users.propTypes = {
-    users: PropTypes.array.isRequired
 };
 
 export default Users;
