@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "./pagination";
-import { paginate } from "../utilits/utils";
+import { paginate } from "../../utilits/utils";
 import GroupList from "./groupList";
-import api from "../api";
+import api from "../../api";
 import SearchStatus from "./searchStatus";
 import UsersTable from "./usersTable";
 import _ from "lodash";
+import { useParams } from "react-router-dom";
+import User from "./user/user";
 
 const Users = () => {
+    const routeParams = useParams();
+    if (routeParams.userId) {
+        return <User userId = {routeParams.userId}/>;
+    }
+
     // Берём данные api users
     const [users, setUsers] = useState();
 
