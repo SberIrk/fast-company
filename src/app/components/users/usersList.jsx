@@ -6,6 +6,7 @@ import api from "../../api";
 import SearchStatus from "./searchStatus";
 import UsersTable from "./usersTable";
 import _ from "lodash";
+import SearchUser from "./searchUser";
 
 const UsersList = () => {
     // Берём данные api users
@@ -20,8 +21,8 @@ const UsersList = () => {
     const pageSize = 6;
     const [currentPage, setCurrentPage] = useState(1);
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [searchUser, setSearchUser] = useState("");
 
-    //
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
@@ -35,10 +36,20 @@ const UsersList = () => {
     }
 
     const valuePropertyProf = "_id";
-    const filteredUsers = selectedProf
-        // Тут не поулчаеться сравнить обьекты
-        ? users.filter((user) => user.profession[valuePropertyProf] === selectedProf[valuePropertyProf])
-        : users;
+
+    // Функция проверки фильтрации
+    const filterCheck = () => {
+        // По профессии
+        if (selectedProf) {
+            return users.filter((user) => user.profession[valuePropertyProf] === selectedProf[valuePropertyProf]);
+        // По имени
+        } else if (searchUser.trim()) {
+            return users.filter((user) => user.name.toLowerCase().indexOf(searchUser.trim().toLowerCase()) > -1);
+        // Нет фильтрации
+        } else return users;
+    };
+
+    const filteredUsers = filterCheck();
 
     const count = filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
@@ -55,12 +66,14 @@ const UsersList = () => {
 
     // Фильтр профессии
     const handleProfessionSelect = (item) => {
+        setSearchUser("");
         setSelectedProf(item);
     };
 
     // Очистить фильтр
     const clearFilter = () => {
         setSelectedProf();
+        setSearchUser("");
     };
 
     // Сортировка
@@ -87,6 +100,12 @@ const UsersList = () => {
         });
     };
 
+    // Событие поля поиска юзера
+    const handleSearchUser = ({ target }) => {
+        setSelectedProf();
+        setSearchUser(target.value);
+    };
+
     return (
         <div className="d-flex">
             {professions && (
@@ -107,6 +126,10 @@ const UsersList = () => {
             )}
             <div className="d-flex flex-column p-3">
                 <SearchStatus length = {count}/>
+                <SearchUser
+                    searchUser = {searchUser}
+                    onChangeSearchInput={handleSearchUser}
+                />
                 {count > 0 && <UsersTable
                     users = {userCrop}
                     onSort = {handleSort}
