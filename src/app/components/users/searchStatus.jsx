@@ -1,6 +1,6 @@
 // Header users
 import React from "react";
-import { declOfNum } from "../utilits/utils";
+import { declOfNum } from "../../utilits/utils";
 import PropTypes from "prop-types";
 
 const SearchStatus = ({ length }) => {

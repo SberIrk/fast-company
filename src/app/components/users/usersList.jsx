@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "./pagination";
-import { paginate } from "../utilits/utils";
+import { paginate } from "../../utilits/utils";
 import GroupList from "./groupList";
-import api from "../api";
+import api from "../../api";
 import SearchStatus from "./searchStatus";
 import UsersTable from "./usersTable";
 import _ from "lodash";
 
-const Users = () => {
+const UsersList = () => {
     // Берём данные api users
     const [users, setUsers] = useState();
 
@@ -127,4 +127,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default UsersList;
