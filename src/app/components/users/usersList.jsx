@@ -6,15 +6,8 @@ import api from "../../api";
 import SearchStatus from "./searchStatus";
 import UsersTable from "./usersTable";
 import _ from "lodash";
-import { useParams } from "react-router-dom";
-import User from "./user/user";
 
-const Users = () => {
-    const routeParams = useParams();
-    if (routeParams.userId) {
-        return <User userId = {routeParams.userId}/>;
-    }
-
+const UsersList = () => {
     // Берём данные api users
     const [users, setUsers] = useState();
 
@@ -134,4 +127,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default UsersList;
