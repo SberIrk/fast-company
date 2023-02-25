@@ -1,6 +1,12 @@
-const _isRequiredText = (value) => (typeof value === "string")
-    ? Boolean(value.trim())
-    : false;
+const _isRequired = (value) => {
+    if (typeof value === "string") {
+        return value.trim() === "";
+    }
+    if (typeof value === "boolean") {
+        return !value;
+    }
+    return !value;
+};
 
 const _isEmail = (value) => (typeof value === "string")
     ? /^\S+@\S+\.\S+$/g.test(value)
@@ -25,26 +31,26 @@ const _isMinSymbol = (value, min) => (typeof value === "string")
 const _validate = (validateMethod, data, config) => {
     let error = false;
     switch (validateMethod) {
-    case "isRequiredText":
-        error = !_isRequiredText(data.value);
+    case "isRequired":
+        error = _isRequired(data);
         break;
     case "isEmail":
-        error = !_isEmail(data.value);
+        error = !_isEmail(data);
         break;
     case "noSpace":
-        error = !_isSpace(data.value);
+        error = !_isSpace(data);
         break;
 
     case "isCaption":
-        error = !_isCaptionSymbol(data.value);
+        error = !_isCaptionSymbol(data);
         break;
 
     case "isDigital":
-        error = !_isContainDigit(data.value);
+        error = !_isContainDigit(data);
         break;
 
     case "min":
-        error = !_isMinSymbol(data.value, config.value);
+        error = !_isMinSymbol(data, config.value);
         break;
     }
 

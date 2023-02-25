@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "./pagination";
-import { paginate } from "../../utilits/utils";
-import GroupList from "./groupList";
-import api from "../../api";
-import SearchStatus from "./searchStatus";
-import UsersTable from "./usersTable";
+import Pagination from "../../common/pagination";
+import { paginate } from "../../../utilits/utils";
+import GroupList from "../../common/groupList";
+import api from "../../../api";
+import SearchStatus from "../../ui/searchStatus";
+import UsersTable from "../../ui/usersTable";
 import _ from "lodash";
-import SearchUser from "./searchUser";
+import SearchUser from "../../ui/searchUser";
 
-const UsersList = () => {
+const UsersListPage = () => {
     // Берём данные api users
     const [users, setUsers] = useState();
 
@@ -150,4 +150,4 @@ const UsersList = () => {
     );
 };
 
-export default UsersList;
+export default UsersListPage;
